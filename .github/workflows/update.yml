@@ -1,0 +1,45 @@
+# 이 파일은 .github/workflows/update.yml 경로에 저장하세요
+name: US CCSS 자동 갱신
+
+on:
+  schedule:
+    - cron: "0 9 1,16 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    # FRED graph CSV는 GitHub-hosted IP에서 timeout 되는 경우가 있어
+    # GL 모니터와 같은 Mac mini runner를 쓴다. 이 저장소에 runner가
+    # 등록되기 전에는 workflow_dispatch가 queued로 남을 수 있다.
+    runs-on: [self-hosted, macOS, gl-monitor]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 단위 테스트
+        env:
+          PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        run: /usr/local/bin/python3 -m unittest discover -s tests -v
+
+      - name: 데이터 갱신 및 빌드
+        env:
+          PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        run: |
+          CERTFILE=$(/usr/local/bin/python3 -c 'import certifi; print(certifi.where())')
+          SSL_CERT_FILE="$CERTFILE" /usr/local/bin/python3 build.py --out dist
+
+      - name: 변경사항 커밋
+        run: |
+          git config user.name  "ccss-bot"
+          git config user.email "ccss-bot@users.noreply.github.com"
+          git add dist
+          if git diff --staged --quiet; then
+            echo "변경 없음 — 신규 데이터가 아직 발표되지 않았습니다"
+          else
+            git commit -m "chore: CCSS 데이터 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          fi

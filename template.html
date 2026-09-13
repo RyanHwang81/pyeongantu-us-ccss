@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평안투 · US Consumer Credit Stress Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C34A32'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34' fill='%23FAF9F5'%3E%E5%B9%B3%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1EA; --card:#FFFDF8; --card2:#F7F3EC; --line:#E6DFD8; --line2:#CFC8BC;
+  --ink:#171511; --text:#403A33; --muted:#6C6A64; --brand:#C34A32; --link:#943421;
+  --green:#2E7D54; --yellow:#B07F1E; --orange:#C36A21; --red:#B33A3A;
+  --shadow:0 1px 2px rgba(23,21,17,.05),0 8px 28px rgba(23,21,17,.07);
+  --radius:14px; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans KR",-apple-system,sans-serif;background:var(--bg);color:var(--ink);
+  background-image:radial-gradient(1000px 420px at 85% -8%,rgba(195,74,50,.06),transparent 60%)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px 72px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:24px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#C34A32,#A9583E);color:#FAF9F5;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand h1{font-family:"Noto Serif KR",Georgia,serif;font-size:20px;letter-spacing:-.03em}
+.brand .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:12px;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;color:var(--text)}
+.pill b{font-family:var(--mono)}
+.hero{margin:22px 0;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600}
+.hero h2{font-family:"Noto Serif KR",Georgia,serif;font-size:clamp(26px,4vw,40px);letter-spacing:-.04em;margin:8px 0 6px;line-height:1.15}
+.hero .lead{color:var(--text);max-width:760px;line-height:1.7;font-size:15.5px}
+.hero-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:12px;margin-top:20px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat .k{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.stat .v{font-family:var(--mono);font-size:28px;font-weight:600;margin-top:6px;letter-spacing:-.04em}
+.stat .d{font-size:12.5px;color:var(--text);margin-top:4px;line-height:1.45}
+.tone-green{color:var(--green)} .tone-yellow{color:var(--yellow)} .tone-orange{color:var(--orange)} .tone-red{color:var(--red)}
+.interp{margin-top:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.interp div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+.interp .k{font-size:10.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+.interp .v{font-size:13.5px;margin-top:4px;font-weight:700}
+.chain{margin:8px 0 22px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
+.layer{margin:28px 0 10px}
+.layer h3{font-family:"Noto Serif KR",Georgia,serif;font-size:22px;letter-spacing:-.03em}
+.layer p{color:var(--muted);font-size:13.5px;margin-top:4px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px}
+.card button{all:unset;cursor:pointer;display:block;width:100%}
+.card .en{font-size:12px;color:var(--muted)}
+.card h4{font-size:16px;margin:4px 0 10px;letter-spacing:-.02em}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metrics span{display:block;font-size:12px;color:var(--muted)}
+.metrics b{display:block;font-family:var(--mono);font-size:16px;color:var(--ink);margin-top:2px}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 7px;margin-left:6px}
+.q-GOOD{background:#e4f3ea;color:var(--green)} .q-PARTIAL,.q-STALE{background:#f7ecd3;color:var(--yellow)}
+.q-UNAVAILABLE,.q-METHODOLOGY{background:#f8e4e0;color:var(--red)}
+.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;line-height:1.65;color:var(--text)}
+.card.open .detail{display:block}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px 10px;margin:14px 0}
+.chart h3{font-size:16px}
+.chart .hint{font-size:12.5px;color:var(--muted);margin:4px 0 8px;line-height:1.5}
+svg.plot{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text);padding:4px 0 8px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:5px}
+.note{font-size:13px;color:var(--text);background:var(--card2);border:1px dashed var(--line2);border-radius:12px;padding:14px 16px;margin:18px 0;line-height:1.7}
+footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.65}
+a{color:var(--link)}
+@media(max-width:900px){
+  .hero-grid,.interp,.cards{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .wrap{padding:0 14px 56px}
+  .hero-grid,.interp,.cards{grid-template-columns:1fr}
+  .stat .v{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand">
+    <div class="logo">평</div>
+    <div>
+      <h1>US Consumer Credit Stress</h1>
+      <div class="sub">가계 신용 스트레스가 침체·금융 스트레스로 번지기 전에 전이 경로를 추적합니다</div>
+    </div>
+  </div>
+  <div class="pills">
+    <div class="pill">기준 <b id="asof">—</b></div>
+    <div class="pill">신뢰도 <b id="conf">—</b></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="kicker">US CONSUMER CREDIT STRESS</div>
+  <h2>Consumer Credit Stress Score</h2>
+  <p class="lead">레벨만 보지 않습니다. 초기 연체 → 심각 연체 → 상각 → 여신 기준 강화 → 신용 수축이 한 줄로 이어지는지를 봅니다.</p>
+  <div class="hero-grid">
+    <div class="stat"><div class="k">CCSS</div><div class="v" id="ccss">—</div><div class="d" id="status">—</div></div>
+    <div class="stat"><div class="k">Stress Momentum</div><div class="v" id="momdir" style="font-size:20px">—</div><div class="d" id="momreg">—</div></div>
+    <div class="stat"><div class="k">Credit Recession Signal</div><div class="v" id="sig">—</div><div class="d" id="sigd">A/B/C/D 조건</div></div>
+    <div class="stat"><div class="k">Data Confidence</div><div class="v" id="conf2">—</div><div class="d">공식 1차 자료만 사용. 없는 값은 만들지 않습니다.</div></div>
+  </div>
+  <div class="interp" id="interp"></div>
+</section>
+<p class="chain">Household Pressure → Early Delinquency → Serious Delinquency → Bank Loss → Credit Tightening → Credit Contraction → Consumption Slowdown</p>
+
+<div id="layers"></div>
+
+<section class="chart">
+  <h3>Chart 1–2 · CCSS 역사와 미국 경기침체</h3>
+  <p class="hint">회색 띠는 NBER 경기침체입니다. 점수는 2000년 이후 expanding percentile이라 미래 값을 보지 않습니다.</p>
+  <div id="chart-ccss"></div>
+</section>
+<section class="chart">
+  <h3>Chart 3 · 초기 연체 vs 심각 연체 (신용카드 / 자동차)</h3>
+  <p class="hint">실선은 30+ 유입(flow), 점선은 90+ 유입입니다. 주식형 연체율(stock)이 아닙니다.</p>
+  <div class="legend"><span><i style="background:#C34A32"></i>CC 30+</span><span><i style="background:#C34A32;opacity:.45"></i>CC 90+</span><span><i style="background:#2F6FB0"></i>Auto 30+</span><span><i style="background:#2F6FB0;opacity:.45"></i>Auto 90+</span></div>
+  <div id="chart-delinq"></div>
+</section>
+<section class="chart">
+  <h3>Chart 4 · 신용카드 상각률 · 전 은행 vs 기타/소형 은행</h3>
+  <p class="hint">기타 은행은 연준 CHGDEL Other Banks입니다. FRED CORCCACBO는 더 이상 제공되지 않아 원자료를 직접 씁니다.</p>
+  <div class="legend"><span><i style="background:#171511"></i>All banks</span><span><i style="background:#C34A32"></i>Other banks</span></div>
+  <div id="chart-loss"></div>
+</section>
+<section class="chart">
+  <h3>Chart 5 · 신용 공급 · SLOOS 기준 강화와 회전신용 증가율</h3>
+  <p class="hint">SLOOS가 플러스이고 회전신용 증가가 역사 중앙값 아래로 같이 가면 공급 수축 조건(D)입니다.</p>
+  <div class="legend"><span><i style="background:#C34A32"></i>SLOOS tightening</span><span><i style="background:#2F6FB0"></i>Revolving credit YoY</span></div>
+  <div id="chart-supply"></div>
+</section>
+<section class="chart">
+  <h3>Chart 6 · Stress Level vs Stress Momentum</h3>
+  <p class="hint">가로축은 CCSS, 세로축은 4분기 변화입니다. 최근 점은 더 크게 표시합니다.</p>
+  <div id="chart-regime"></div>
+</section>
+
+<div class="note" id="subprime"></div>
+<div class="note" id="backtest"></div>
+<footer>
+  출처: New York Fed Household Debt and Credit Report, Federal Reserve Board Charge-Off and Delinquency Rates, SLOOS, G.19 Consumer Credit (FRED). 이 화면은 투자 자문이 아닙니다. 과거 구간 분류가 미래를 보장하지 않습니다.
+  <br>텔레그램: <a href="https://t.me/signalandflow">https://t.me/signalandflow</a>
+</footer>
+</div>
+<script>
+const DATA = __DATA_JSON__;
+const $ = id => document.getElementById(id);
+const fmt = (v, d=1) => (v==null || Number.isNaN(v)) ? "—" : Number(v).toFixed(d);
+const tone = c => ({green:"tone-green",yellow:"tone-yellow",orange:"tone-orange",red:"tone-red"}[c]||"");
+const H = DATA.hero || {};
+$("asof").textContent = DATA.meta.as_of_label || "—";
+$("conf").textContent = DATA.meta.data_confidence || "—";
+$("conf2").textContent = DATA.meta.data_confidence || "—";
+const ccssEl = $("ccss");
+ccssEl.textContent = H.ccss==null ? "—" : fmt(H.ccss,1) + " / 100";
+ccssEl.className = "v " + tone(H.color);
+$("status").textContent = "Status: " + (H.status||"—");
+$("momdir").textContent = (H.momentum&&H.momentum.direction)||"—";
+$("momreg").textContent = ((H.momentum&&H.momentum.regime)||"—") + (H.momentum&&H.momentum.delta!=null ? ` · Δ4Q ${fmt(H.momentum.delta,1)}` : "");
+$("sig").textContent = (H.signal&&H.signal.flag)||"—";
+$("sig").className = "v " + (H.signal&&H.signal.flag==="ON" ? "tone-red" : H.signal&&H.signal.flag==="WATCH" ? "tone-yellow" : "tone-green");
+if(H.signal&&H.signal.conditions){
+  const c=H.signal.conditions;
+  $("sigd").textContent = `A 초기연체 ${c.A?"ON":"off"} · B 심각연체 ${c.B?"ON":"off"} · C 상각 ${c.C?"ON":"off"} · D 공급수축 ${c.D?"ON":"off"}`;
+}
+const I = DATA.interpretation||{};
+const imap = [["Consumer Stress",I.consumer_stress],["Delinquency",I.delinquency],["Bank Loss",I.bank_loss],["Credit Standards",I.credit_standards],["Credit Contraction",I.credit_contraction],["Overall",I.overall]];
+$("interp").innerHTML = imap.map(([k,v])=>`<div><div class="k">${k}</div><div class="v">${v||"—"}</div></div>`).join("");
+
+const LAYER = {borrower:["BORROWER STRESS","초기 연체와 가계 압력"], serious:["SERIOUS STRESS","90+ 유입 — 손실로 넘어가기 직전"], loss:["LOSS REALIZATION","은행이 실제로 손실을 인식하는 단계"], supply:["CREDIT SUPPLY","기준 강화와 한도·잔액 증가 둔화"]};
+const byL = {};
+for(const k of DATA.kpis){ (byL[k.layer]=byL[k.layer]||[]).push(k); }
+const layers = $("layers");
+for(const key of ["borrower","serious","loss","supply"]){
+  const spec = LAYER[key];
+  const ls = DATA.layers[key];
+  const sec = document.createElement("section");
+  sec.className = "layer";
+  sec.innerHTML = `<h3>${spec[0]}${ls!=null?` <span class="badge q-GOOD">${fmt(ls,0)}</span>`:""}</h3><p>${spec[1]}</p>`;
+  const grid = document.createElement("div"); grid.className="cards";
+  for(const k of byL[key]||[]){
+    const card = document.createElement("article");
+    card.className="card";
+    const q = k.quality||"UNAVAILABLE";
+    card.innerHTML = `<button type="button"><div class="en">${k.label_en}</div><h4>${k.label_ko}<span class="badge q-${q.replace(" ","")}">${q}</span></h4>
+      <div class="metrics">
+        <div><span>Current</span><b>${k.latest_value==null?"—":fmt(k.latest_value,2)+k.unit}</b></div>
+        <div><span>Previous</span><b>${k.previous_value==null?"—":fmt(k.previous_value,2)+k.unit}</b></div>
+        <div><span>Change</span><b>${k.change==null?"—":(k.change>0?"+":"")+fmt(k.change,2)}</b></div>
+        <div><span>Stress Score</span><b>${k.score==null?"—":fmt(k.score,0)}</b></div>
+        <div><span>Period</span><b>${k.latest_period||"—"}</b></div>
+        <div><span>Weight</span><b>${Math.round(k.weight*100)}%</b></div>
+      </div></button>
+      <div class="detail"><p>${k.interpretation}</p><p>${k.methodology}</p><p>Source: <a href="${k.source_url}" target="_blank" rel="noopener">${k.source}</a> · ${k.series_id}</p>
+      <div data-spark="${k.key}"></div></div>`;
+    card.querySelector("button").addEventListener("click",()=>card.classList.toggle("open"));
+    grid.appendChild(card);
+  }
+  sec.appendChild(grid); layers.appendChild(sec);
+}
+
+function lineChart(el, seriesList, recessions, yFmt){
+  const w=1080,h=320,p={l:48,r:16,t:16,b:28};
+  const all=[]; seriesList.forEach(s=>s.pts.forEach(pt=>all.push(pt)));
+  if(!all.length){ el.innerHTML="<p class='hint'>표시할 시계열이 없습니다.</p>"; return; }
+  const xs=all.map(d=>+new Date(d.d)), ys=all.map(d=>d.v);
+  const xmin=Math.min(...xs), xmax=Math.max(...xs);
+  let ymin=Math.min(...ys), ymax=Math.max(...ys); if(ymin===ymax){ymin-=1;ymax+=1;}
+  const pad=(ymax-ymin)*0.08; ymin-=pad; ymax+=pad;
+  const X=t=>p.l+(t-xmin)/(xmax-xmin||1)*(w-p.l-p.r);
+  const Y=v=>p.t+(1-(v-ymin)/(ymax-ymin||1))*(h-p.t-p.b);
+  let rec="";
+  (recessions||[]).forEach(r=>{
+    const x1=X(+new Date(r.start)), x2=X(+new Date(r.end));
+    rec+=`<rect x="${Math.min(x1,x2)}" y="${p.t}" width="${Math.max(2,Math.abs(x2-x1))}" height="${h-p.t-p.b}" fill="#171511" opacity=".06"/>`;
+  });
+  const paths=seriesList.map(s=>{
+    const d=s.pts.filter(pt=>pt.v!=null).map((pt,i)=>(i?"L":"M")+X(+new Date(pt.d)).toFixed(1)+" "+Y(pt.v).toFixed(1)).join(" ");
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.width||2}" stroke-dasharray="${s.dash||""}" opacity="${s.op||1}"/>`;
+  }).join("");
+  const yticks=5;
+  let grid="";
+  for(let i=0;i<=yticks;i++){
+    const v=ymin+(ymax-ymin)*i/yticks, y=Y(v);
+    grid+=`<line x1="${p.l}" x2="${w-p.r}" y1="${y}" y2="${y}" stroke="#E6DFD8"/><text x="8" y="${y+4}" font-size="11" fill="#6C6A64" font-family="IBM Plex Mono">${(yFmt||(z=>z.toFixed(1)))(v)}</text>`;
+  }
+  const years=[...new Set(all.map(d=>d.d.slice(0,4)))].filter((y,i,a)=>i===0||i===a.length-1||y.endsWith("0")||y.endsWith("5"));
+  const xlab=years.map(y=>{
+    const pt=all.find(d=>d.d.startsWith(y)); if(!pt) return "";
+    return `<text x="${X(+new Date(pt.d))}" y="${h-6}" font-size="11" fill="#6C6A64" text-anchor="middle" font-family="IBM Plex Mono">${y}</text>`;
+  }).join("");
+  el.innerHTML=`<svg class="plot" viewBox="0 0 ${w} ${h}" role="img">${rec}${grid}${paths}${xlab}</svg>`;
+}
+function scatter(el, pts){
+  const w=1080,h=340,p={l:48,r:16,t:16,b:36};
+  if(!pts.length){el.innerHTML="<p class='hint'>표시할 점이 없습니다.</p>";return;}
+  const xs=pts.map(d=>d.x), ys=pts.map(d=>d.y);
+  const xmin=Math.min(0,...xs), xmax=Math.max(100,...xs);
+  const ymin=Math.min(-20,...ys), ymax=Math.max(20,...ys);
+  const X=v=>p.l+(v-xmin)/(xmax-xmin||1)*(w-p.l-p.r);
+  const Y=v=>p.t+(1-(v-ymin)/(ymax-ymin||1))*(h-p.t-p.b);
+  const last=pts[pts.length-1];
+  const dots=pts.map((pt,i)=>{
+    const r=i>pts.length-8?4.5:2.2;
+    const o=i/pts.length*.7+.25;
+    return `<circle cx="${X(pt.x)}" cy="${Y(pt.y)}" r="${r}" fill="#C34A32" opacity="${o}"><title>${pt.d} CCSS ${pt.x.toFixed(1)} Δ ${pt.y.toFixed(1)}</title></circle>`;
+  }).join("");
+  el.innerHTML=`<svg class="plot" viewBox="0 0 ${w} ${h}" role="img">
+    <rect x="${X(0)}" y="${Y(ymax)}" width="${X(60)-X(0)}" height="${Y(0)-Y(ymax)}" fill="#2E7D54" opacity=".05"/>
+    <rect x="${X(60)}" y="${Y(ymax)}" width="${X(xmax)-X(60)}" height="${Y(0)-Y(ymax)}" fill="#B33A3A" opacity=".05"/>
+    <rect x="${X(0)}" y="${Y(0)}" width="${X(60)-X(0)}" height="${Y(ymin)-Y(0)}" fill="#2F6FB0" opacity=".05"/>
+    <rect x="${X(60)}" y="${Y(0)}" width="${X(xmax)-X(60)}" height="${Y(ymin)-Y(0)}" fill="#B07F1E" opacity=".06"/>
+    <line x1="${X(60)}" x2="${X(60)}" y1="${p.t}" y2="${h-p.b}" stroke="#171511" stroke-dasharray="4 4"/>
+    <line x1="${p.l}" x2="${w-p.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="#171511" stroke-dasharray="4 4"/>
+    ${dots}
+    <circle cx="${X(last.x)}" cy="${Y(last.y)}" r="7" fill="none" stroke="#171511" stroke-width="2"/>
+    <text x="${p.l+8}" y="${p.t+14}" font-size="11" fill="#6C6A64">HIGH LEVEL + DETERIORATING</text>
+    <text x="${p.l+8}" y="${h-p.b-10}" font-size="11" fill="#6C6A64">LOW LEVEL + IMPROVING / STABLE</text>
+    <text x="8" y="${Y(0)}" font-size="11" fill="#6C6A64" font-family="IBM Plex Mono">Δ4Q</text>
+    <text x="${X(60)}" y="${h-8}" font-size="11" fill="#6C6A64" text-anchor="middle" font-family="IBM Plex Mono">CCSS 60</text>
+  </svg>`;
+}
+
+const C = DATA.charts;
+lineChart($("chart-ccss"), [{pts:C.ccss,color:"#C34A32",width:2.4}], C.recessions);
+lineChart($("chart-delinq"), [
+  {pts:C.cc_early,color:"#C34A32",width:2.2},
+  {pts:C.cc_serious,color:"#C34A32",width:2,dash:"5 4",op:.75},
+  {pts:C.auto_early,color:"#2F6FB0",width:2.2},
+  {pts:C.auto_serious,color:"#2F6FB0",width:2,dash:"5 4",op:.75}
+], C.recessions);
+lineChart($("chart-loss"), [
+  {pts:C.chargeoff_all,color:"#171511",width:2.2},
+  {pts:C.chargeoff_other,color:"#C34A32",width:2.2}
+], C.recessions);
+lineChart($("chart-supply"), [
+  {pts:C.sloos,color:"#C34A32",width:2.2},
+  {pts:C.credit_growth,color:"#2F6FB0",width:2.2}
+], C.recessions);
+scatter($("chart-regime"), C.regime||[]);
+
+for(const k of DATA.kpis){
+  const el=document.querySelector(`[data-spark="${k.key}"]`);
+  if(el && k.history && k.history.length){
+    lineChart(el, [{pts:k.history,color:"#C34A32",width:1.8}], C.recessions);
+  }
+}
+
+$("subprime").innerHTML = `<strong>Context · Subprime share는 CCSS에 넣지 않습니다.</strong> ${DATA.context.note} 차트에 2026 Q1 방법론 단절(${DATA.context.break_date})을 기준으로 연속 시계열처럼 읽지 마십시오.`;
+const B=DATA.backtest||{};
+if(B.windows){
+  $("backtest").innerHTML = "<strong>Backtest (사전 구간, 사후 최적화 없음)</strong><br>" + B.windows.filter(w=>w.available).map(w=>
+    `${w.window}: 시작 ${fmt(w.start_ccss,1)} → 최고 ${fmt(w.max_ccss,1)} (${w.max_date}) · 60 돌파 ${w.crossed_60?"Y":"N"} · 75 돌파 ${w.crossed_75?"Y":"N"}`
+  ).join("<br>") + `<br>75 이상 분기 ${B.n_quarters_ge_75}개, 이후 12개월 내 침체 ${B.n_ge75_followed_by_recession_12m} / 비침체 ${B.n_ge75_without_recession_12m}. ${B.note}`;
+}
+
+(function(){
+  if(window.parent===window) return;
+  let last=0;
+  const post=()=>{
+    const h=Math.ceil(document.documentElement.scrollHeight);
+    if(Math.abs(h-last)>8){last=h; window.parent.postMessage({type:"gl-height",height:h},"*");}
+  };
+  window.addEventListener("load",post);
+  window.addEventListener("resize",post);
+  if(window.ResizeObserver) new ResizeObserver(post).observe(document.body);
+  setInterval(post,1200); post();
+})();
+</script>
+</body>
+</html>
