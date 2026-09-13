@@ -30,8 +30,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .pill b{font-family:var(--mono)}
 .hero{margin:22px 0;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px}
 .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600}
-.hero h2{font-family:"Noto Serif KR",Georgia,serif;font-size:clamp(26px,4vw,40px);letter-spacing:-.04em;margin:8px 0 6px;line-height:1.15}
-.hero .lead{color:var(--text);max-width:760px;line-height:1.7;font-size:15.5px}
+.hero h2{font-family:"Noto Serif KR",Georgia,serif;font-size:clamp(22px,5.4vw,40px);letter-spacing:-.04em;margin:8px 0 6px;line-height:1.2;overflow-wrap:anywhere;word-break:keep-all}
+.hero .lead{color:var(--text);max-width:760px;line-height:1.7;font-size:15.5px;overflow-wrap:anywhere;word-break:keep-all}
 .hero-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:12px;margin-top:20px}
 .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .stat .k{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
@@ -68,13 +68,19 @@ svg.plot{width:100%;height:auto;display:block}
 .note{font-size:13px;color:var(--text);background:var(--card2);border:1px dashed var(--line2);border-radius:12px;padding:14px 16px;margin:18px 0;line-height:1.7}
 footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.65}
 a{color:var(--link)}
+html,body{overflow-x:hidden}
+.brand h1,.brand .sub,.chain,.card h4,.card .en{overflow-wrap:anywhere;word-break:keep-all}
+.stat .v,.stat .d,.interp .v{overflow-wrap:anywhere;word-break:break-word}
 @media(max-width:900px){
   .hero-grid,.interp,.cards{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
-  .wrap{padding:0 14px 56px}
+  .wrap{padding:0 12px 56px}
+  header{align-items:flex-start}
   .hero-grid,.interp,.cards{grid-template-columns:1fr}
-  .stat .v{font-size:24px}
+  .stat .v{font-size:22px}
+  .hero{padding:16px 14px}
+  .chain{font-size:11px;line-height:1.55}
 }
 </style>
 </head>
