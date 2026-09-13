@@ -21,7 +21,8 @@ body{font-family:"Noto Sans KR",-apple-system,sans-serif;background:var(--bg);co
   background-image:radial-gradient(1000px 420px at 85% -8%,rgba(195,74,50,.06),transparent 60%)}
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px 72px}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:24px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.brand > div{min-width:0;flex:1}
 .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#C34A32,#A9583E);color:#FAF9F5;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:18px}
 .brand h1{font-family:"Noto Serif KR",Georgia,serif;font-size:20px;letter-spacing:-.03em}
 .brand .sub{font-size:12.5px;color:var(--muted);margin-top:2px;max-width:42rem;overflow-wrap:anywhere;word-break:keep-all}
