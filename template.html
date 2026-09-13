@@ -43,7 +43,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .interp div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
 .interp .k{font-size:10.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-weight:700}
 .interp .v{font-size:13.5px;margin-top:4px;font-weight:700}
-.chain{margin:8px 0 22px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em;line-height:1.55;white-space:normal;overflow-wrap:anywhere}
+.chain{margin:8px 0 22px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em;line-height:1.7;display:flex;flex-wrap:wrap;gap:2px 8px}
+.chain span{white-space:nowrap}
 .layer{margin:28px 0 10px}
 .layer h3{font-family:"Noto Serif KR",Georgia,serif;font-size:22px;letter-spacing:-.03em}
 .layer p{color:var(--muted);font-size:13.5px;margin-top:4px}
@@ -113,7 +114,7 @@ html,body{overflow-x:hidden}
   </div>
   <div class="interp" id="interp"></div>
 </section>
-<p class="chain">Household Pressure → Early Delinquency → Serious Delinquency → Bank Loss → Credit Tightening → Credit Contraction → Consumption Slowdown</p>
+<p class="chain"><span>Household Pressure</span><span>→ Early Delinquency</span><span>→ Serious Delinquency</span><span>→ Bank Loss</span><span>→ Credit Tightening</span><span>→ Credit Contraction</span><span>→ Consumption Slowdown</span></p>
 
 <div id="layers"></div>
 
