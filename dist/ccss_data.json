@@ -1,11 +1,11 @@
 {
   "meta": {
-    "built_at": "2026-09-16T13:49:59Z",
+    "built_at": "2026-10-01T15:47:56Z",
     "as_of": "2026-04-01",
     "as_of_label": "2026 Q2",
     "nyfed_file": "2026q2",
     "weight_sum": 1.0,
-    "data_confidence": "HIGH"
+    "data_confidence": "MEDIUM"
   },
   "hero": {
     "ccss": 55.275587608966774,
@@ -28,7 +28,7 @@
       "n_on": 2,
       "flag": "WATCH"
     },
-    "confidence": "HIGH"
+    "confidence": "MEDIUM"
   },
   "kpis": [
     {
@@ -3361,8 +3361,8 @@
       "interpretation": "회전신용 증가가 둔화·감소하면 신용 수축이 소비 둔화로 이어질 수 있다.",
       "higher_is_stress": false,
       "frequency": "monthly",
-      "quality": "GOOD",
-      "quality_note": "",
+      "quality": "STALE",
+      "quality_note": "최신 관측 2026-07-01 이(가) 발표 주기 대비 오래되었습니다.",
       "latest_period": "2026 Q3",
       "latest_date": "2026-07-01",
       "latest_value": 3.582434085708308,
